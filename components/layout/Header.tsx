@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const menuItems = [
   { name: "Home", href: "/" },
-  { name: "Publick Holidays", href: "/publick-holidays" },
+  { name: "Public Holidays", href: "/public-holidays" },
   { name: "About", href: "/about" },   
   { name: "Blogs", href: "/blogs" },
   { name: "Contact us", href: "/contact-us" },
