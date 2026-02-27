@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${cormorantGaramond.variable} antialiased`} >
+      <body className={`${poppins.variable} ${cormorantGaramond.variable} antialiased`}  suppressHydrationWarning={true}>
         <Header />
         {children}
         <Footer />

@@ -20,17 +20,12 @@ export default function HomeBanner() {
                             Discover handcrafted Travel Experiences that blend adventure
                             adventure and luxury, creating memories that last a lifetime
                         </p>
-
+                        
                         <div className="mt-5 w-full flex item-start gap-x-5">
                             <button className="px-5 py-2 bg-red-500 text-white rounded-sm font-medium cursor-pointer">Discover Now</button>
                             <button className="px-5 py-2 bg-yellow-500 text-black rounded-sm font-medium cursor-pointer">How it Works?</button>
                         </div>
                     </div>
-
-
-
-
-
 
                 </div>
             </div>
