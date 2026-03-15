@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 
+
 export const metadata: Metadata = {
   title: "Bakasyon Tayo",
   description: "Book your perfect vacation rental with Bakasyon Tayo.",
@@ -15,12 +16,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${cormorantGaramond.variable} antialiased`}  suppressHydrationWarning={true}>
-        <Header />
+      <body>
         {children}
-        <Footer />
       </body>
     </html>
   );

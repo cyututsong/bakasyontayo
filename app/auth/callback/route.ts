@@ -3,6 +3,45 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 
+//Updating Database Table Profiles Function After Successfull session
+const updateProfile = async (supabase: any, userId: string, firstName: string, lastName: string,) => {
+  const {data, error } = await supabase
+    .from("profiles")
+    .update({
+      first_name:firstName,
+      last_name:lastName
+    })
+    .eq("id", userId);
+
+    if (error) {
+      console.error("Error updating profile:", error)
+    } else {
+      console.log("Profile updated:", data);
+    }
+}
+
+// Helper function to extract name parts
+const extractNameParts = (fullName: string = '') => {
+  const parts = fullName.split(' ')
+  return {
+    firstName: parts[0] || '',
+    lastName: parts.slice(1).join(' ')
+  }
+}
+
+// Helper to prepare user data
+const prepareUserData = (session: any) => {
+  const { firstName, lastName } = extractNameParts(session.user.user_metadata?.full_name)
+  return {
+    id: session.user.id,
+    email: session.user.email,
+    firstName,
+    lastName,
+    avatar: session.user.user_metadata?.avatar_url
+  }
+}
+
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -14,24 +53,6 @@ export async function GET(request: Request) {
   console.log('📍 URL:', request.url)
   console.log('🔑 Code received:', code ? 'Yes (hidden for security)' : 'No')
   console.log('🎯 Redirect target:', redirectTo)
-
-
-    //Updating Database Table Profiles Function After Successfull session
-    const updateProfile = async (supabase: any, userId: string, firstName: string, lastName: string,) => {
-      const {data, error } = await supabase
-        .from("profiles")
-        .update({
-          first_name:firstName,
-          last_name:lastName
-        })
-        .eq("id", userId);
-
-        if (error) {
-          console.error("Error updating profile:", error)
-        } else {
-          console.log("Profile updated:", data);
-        }
-    }
 
 
   if (code) {
@@ -53,30 +74,17 @@ export async function GET(request: Request) {
       
       if (session) { // if session is success
 
+          // Then in your main code:
+          const userData = prepareUserData(session)
 
-          const fullName = session.user.user_metadata?.full_name || ''
-          const nameParts = fullName.split(' ')
-          const firstName = fullName.split(' ')[0]
-          const lastName = nameParts.slice(1).join(' ')
-          
-          const userData = {
-              id: session.user.id,
-              email: session.user.email,
-              firstName: firstName,
-              lastName: lastName,
-              avatar: session.user.user_metadata?.avatar_url
-          }
-        
-        
-              // Check if user profile exists
-              const { data: profile } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', session.user.id)
-                .single()
+          // Check if profile exists and update
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
 
-              //console.log('📋 Profile Data:', profile || 'No profile yet')
-             await updateProfile(supabase, userData.id, userData.firstName, userData.lastName);
+          await updateProfile(supabase, userData.id, userData.firstName, userData.lastName)
 
 
               /*
@@ -87,7 +95,8 @@ export async function GET(request: Request) {
                 name: session.user.user_metadata?.full_name,
                 avatar: session.user.user_metadata?.avatar_url
               })
-
+              */
+              /*
               console.log('=== TOKENS ===')
               console.log('🔐 Access Token:', session.access_token ? `${session.access_token.substring(0, 20)}...` : 'None')
               console.log('🔄 Refresh Token:', session.refresh_token ? `${session.refresh_token.substring(0, 20)}...` : 'None')
@@ -97,21 +106,15 @@ export async function GET(request: Request) {
               console.log('=== FULL TOKEN (for debugging) ===')
               console.log('Full Access Token:', session.access_token)
               */
-              
-
-
       }
+      return NextResponse.redirect(`${origin}${redirectTo}`) // happen the redirection to dashboard
 
-
-      console.log(`✅ Redirecting to: ${origin}${redirectTo}`)
-      return NextResponse.redirect(`${origin}${redirectTo}`)
-      
     } catch (error) {
       console.error('❌ Callback error:', error)
       return NextResponse.redirect(`${origin}/login?error=auth_failed`)
     }
+    
   }
 
-  console.log('❌ No code provided, redirecting to login')
   return NextResponse.redirect(`${origin}/login?error=no_code`)
 }

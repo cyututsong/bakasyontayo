@@ -19,7 +19,7 @@ export default function LoginPage() {
       setError(null)
       
       //console.log('🚀 Starting Google login process...')
-      console.log('Redirect URL:', `${window.location.origin}/auth/callback`)
+      //console.log('Redirect URL:', `${window.location.origin}/auth/callback`)
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -33,12 +33,12 @@ export default function LoginPage() {
         throw error
       }
 
-      console.log('✅ OAuth initiated successfully!')
-      console.log('📤 OAuth Data:', data)
-      console.log('🔗 Provider URL:', data.url)
+      //console.log('✅ OAuth initiated successfully!')
+      //console.log('📤 OAuth Data:', data)
+      //console.log('🔗 Provider URL:', data.url)
       
       // Note: Hindi pa naka-login dito, nire-redirect pa lang sa Google
-      console.log('🔄 Redirecting to Google login page...')
+      //console.log('🔄 Redirecting to Google login page...')
       
     } catch (err: any) {
       setError(err.message || 'An error occurred during Google login')
