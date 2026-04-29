@@ -37,6 +37,7 @@ export async function POST(request) {
             .insert([{ name, price, description, stock }])
             .select()
 
+
         if (error) throw error
 
         return NextResponse.json(data[0], { status: 201 })
