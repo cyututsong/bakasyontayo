@@ -4,7 +4,10 @@ const metadata = {
   description: "Learn more about Bakasyon Tayo, your trusted vacation rental platform.",
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ae01cabfb40561fadc5565ae9abc8898e1b6ff16
 export default function AboutPage() {
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
