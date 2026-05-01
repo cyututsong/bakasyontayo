@@ -73,7 +73,7 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
     try {
-        const supabase = createClient()
+        const supabase = await createClient()
         const { searchParams } = new URL(request.url)
         const id = searchParams.get('id')
 
